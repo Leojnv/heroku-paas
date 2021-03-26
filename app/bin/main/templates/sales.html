@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Productos</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="/css/myStyle.css" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    </head>
+    <body class="b">
+        <header>
+            <!-- NAVIGATION BAR (Taken from: https://getbootstrap.com/docs/5.0/components/navbar/?)-->
+            <nav class="navbar navbar-expand-lg navbar-dark shadow-md">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="">Tienda de Leo</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarNavResponsive"  aria-controls="navbarNavResponsive"
+                            aria-expanded="false" aria-label="Toggle navigation" >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse flex-grow-0" id="navbarNavResponsive">
+                        <ul class="navbar-nav text-right">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/main">Productos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/sales">Historial de Ventas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/products">Administracion de Productos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="cm" class="nav-link" href="/cart">Carrito <span class="badge badge-pill badge-success"  th:text="${amountCart}"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div>
+            <h1 class="title">Ventas</h1>
+        </div>
+        <div class="table">
+            <table th:each="sale : ${sales}">
+                <br>
+                <br>
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Precio (RD$)</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <h4 th:text="'ID VENTA: '+${sale.ID}">ID VENTA</h4>
+                  <h4 th:text="'CLIENTE: '+${sale.user}">CLIENTE</h4>
+                  <h4 th:text="'TOTAL: '+${sale.total}">TOTAL</h4>
+                  <h5 th:text="'FECHA: '+${sale.salesDate}">FECHA</h5>
+                  <tr th:each="p : ${sale.cart.products}">
+                        <th class="row-data" scope="row" th:text="${p.ID}">ID</th>
+                        <td class="row-data" th:text="${p.name}">Nombre</td>
+                        <td class="row-data" th:text="${p.price}">Precio</td>
+                        <td class="row-data"  data-th-type="Integer" th:text="${p.amount}">Cantidad</td>
+                        <td class="row-data" data-th-type="Integer" th:text="${p.price*p.amount}">Total</td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+        
+    </body>
+</html>

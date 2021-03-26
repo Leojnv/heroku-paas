@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Editar Producto</title>
+    <!-- FONTS & ICONS  -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&family=Roboto:wght@300&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <style>
+        .b {
+            background-color: #444444;
+        }
+        .login-form {
+            width: 340px;
+            margin: 50px auto;
+            font-size: 15px;
+            background-color: #222222;
+        }
+        .login-form form {
+            margin-bottom: 15px;
+            background: #222222;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+        .login-form h2 {
+            margin: 0 0 15px;
+        }
+        .form-control, .btn {
+            min-height: 38px;
+            border-radius: 2px;
+        }
+        .btn {
+            font-size: 15px;
+            font-weight: bold;
+            background: #2575fc;
+        }
+    </style>
+</head>
+<body class="b">
+
+<div class="login-form b">
+    <form action="/products/edit" method="post">
+        <h2 class="text-center">Editar Producto</h2>
+        <div class="form-group">
+            <input name="prodID" th:value="${prod.ID}" class="form-control" readonly data-th-type="Integer">
+        </div>
+        <div class="form-group">
+            <input name="prodName" th:value="${prod.name}" type="text" class="form-control" placeholder="Nombre" required="required">
+        </div>
+        <div class="form-group">
+            <input name="prodPrice" th:value="${prod.price}" type="number" min="1" class="form-control" placeholder="Precio" required="required">
+        </div>
+        <div class="form-group">
+            <input name="prodAmount" th:value="${prod.amount}" type="number"  min="1" class="form-control" placeholder="Cantidad" required="required">
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+            <button type="reset" class="btn btn-primary btn-block">Limpiar</button>
+            <a href="/products" class="btn btn-danger btn-lg btn-block add mt-4">Cancelar</a>
+
+        </div>
+    </form>
+
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+</body>
+</html>
