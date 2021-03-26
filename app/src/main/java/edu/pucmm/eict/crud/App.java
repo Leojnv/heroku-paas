@@ -35,7 +35,7 @@ public class App {
 
         Javalin app = Javalin.create(config -> {
             config.addStaticFiles("/public");
-        }).start(7000);
+        }).start(getHerokuAssignedPort());
 
         if (args.length >= 1) {
             modoConexion = args[0];
@@ -277,6 +277,19 @@ public class App {
             ctx.redirect("/products");
         });
 
+    }
+
+    /**
+     * Metodo para indicar el puerto en Heroku
+     * 
+     * @return
+     */
+    private static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 7000; // Retorna el puerto por defecto en caso de no estar en Heroku.
     }
 
     public static String getModoConexion() {
