@@ -1,1 +1,1 @@
-web: java -jar build/libs/app.jar Heroku
+web: java -jar app/build/libs/app.jar Heroku
