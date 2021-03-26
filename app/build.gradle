@@ -8,8 +8,15 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
+    id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
+
+group 'edu.pucmm.eict'
+version '1.0-SNAPSHOT'
+
+mainClassName='edu.pucmm.eict.crud.App'
 
 repositories {
     // Use JCenter for resolving dependencies.
@@ -38,6 +45,7 @@ dependencies {
     compile 'org.hibernate:hibernate-entitymanager:5.4.17.Final'
 
     implementation 'com.h2database:h2:1.4.200'
+    compile 'org.postgresql:postgresql:42.2.1'
     compile "org.jasypt:jasypt:1.9.3"
     
 
@@ -46,4 +54,19 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'edu.pucmm.eict.crud.App'
+}
+
+shadowJar{
+    baseName = 'app'
+    classifier = ''
+    archiveVersion = ''
+}
+
+/**
+ * tarea necesaria para heroku si optamos por la tarea de Shadowjar
+ * en el archivo Procfile debe estar el siguiente comando:
+ * web: java -jar build/libs/app.jar
+ */
+task stage {
+    dependsOn shadowJar
 }

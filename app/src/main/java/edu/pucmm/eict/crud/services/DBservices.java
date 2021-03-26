@@ -1,9 +1,9 @@
 package edu.pucmm.eict.crud.services;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
@@ -12,7 +12,7 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.h2.tools.Server;
+import edu.pucmm.eict.crud.App;
 
 /**
  * DBservices
@@ -21,40 +21,16 @@ import org.h2.tools.Server;
  */
 public class DBservices<T> {
 
-    private final static String url = "jdbc:h2:tcp://localhost/~/myDB"; // Modo Server...
-    private final static String driver = "org.h2.Driver";
-    // Variable utilizada para gestionar la conexión a la DB
-    private static Connection DBconnection = null;
-    // Variable para gestionar el servidor DB
-    private static Server DBserver;
-
-    /**
-     * Metodo para el registro de driver de conexión y conexión con la base de datos
-     */
-    public static Connection connectDB() {
-        try {
-            Class.forName(driver);
-            DBconnection = DriverManager.getConnection(url);
-            System.out.println("__La base de datos se ha conectado correctamente__");
-        } catch (ClassNotFoundException | SQLException ex) {
-            System.out.println("__Se ha producido un error en la conexión de la base de datos__\n");
-            ex.printStackTrace();
-        }
-        return DBconnection;
-    }
-
-    public static void DBstop() {
-        DBserver.shutdown();
-    }
-
-    // ORM
-
     private static EntityManagerFactory emf;
     private Class<T> claseEntidad;
 
     public DBservices(Class<T> claseEntidad) {
         if (emf == null) {
-            emf = Persistence.createEntityManagerFactory("MiUnidadPersistencia");
+            if (App.getModoConexion().equalsIgnoreCase("Heroku")) {
+                emf = getConfiguracionBaseDatosHeroku();
+            } else {
+                emf = Persistence.createEntityManagerFactory("MiUnidadPersistencia");
+            }
         }
         this.claseEntidad = claseEntidad;
 
@@ -62,6 +38,34 @@ public class DBservices<T> {
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+
+    /**
+     * Configurar información de la conexión de Heroku. Tomado de
+     * https://gist.github.com/mlecoutre/4088178
+     * 
+     * @return
+     */
+    private EntityManagerFactory getConfiguracionBaseDatosHeroku() {
+        // Leyendo la información de la variable de ambiente de Heroku
+        String databaseUrl = System.getenv("DATABASE_URL");
+        StringTokenizer st = new StringTokenizer(databaseUrl, ":@/");
+        // Separando las información del conexión.
+        String dbVendor = st.nextToken();
+        String userName = st.nextToken();
+        String password = st.nextToken();
+        String host = st.nextToken();
+        String port = st.nextToken();
+        String databaseName = st.nextToken();
+        // creando la jbdc String
+        String jdbcUrl = String.format("jdbc:postgresql://%s:%s/%s", host, port, databaseName);
+        // pasando las propiedades.
+        Map<String, String> properties = new HashMap<>();
+        properties.put("javax.persistence.jdbc.url", jdbcUrl);
+        properties.put("javax.persistence.jdbc.user", userName);
+        properties.put("javax.persistence.jdbc.password", password);
+        //
+        return Persistence.createEntityManagerFactory("Heroku", properties);
     }
 
     /**

@@ -13,7 +13,6 @@ import java.util.Map;
 import org.jasypt.util.text.StrongTextEncryptor;
 
 import edu.pucmm.eict.crud.logic.cart;
-import edu.pucmm.eict.crud.logic.controller;
 import edu.pucmm.eict.crud.logic.product;
 import edu.pucmm.eict.crud.logic.sales;
 import edu.pucmm.eict.crud.logic.user;
@@ -29,7 +28,8 @@ public class App {
     }
 
     private static String url;
-    private static controller c = new controller();
+    // indica el modo de operacion para la base de datos.
+    private static String modoConexion = "";
 
     public static void main(String[] args) throws SQLException {
 
@@ -37,8 +37,15 @@ public class App {
             config.addStaticFiles("/public");
         }).start(7000);
 
-        // Inicialización Base de Datos
-        DBstart.startDB();
+        if (args.length >= 1) {
+            modoConexion = args[0];
+            System.out.println("Modo de Operacion: " + modoConexion);
+        }
+
+        // Iniciando la base de datos.
+        if (modoConexion.isEmpty()) {
+            DBstart.startDB();
+        }
 
         // Valores de prueba
 
@@ -174,7 +181,6 @@ public class App {
 
         // Ventas
         // Autenticar usuario
-        app.before("/sales", ctx -> c.getSalesFromDB());
         app.before("/sales", ctx -> {
             String currentUser = ctx.sessionAttribute("user");
             if (currentUser == null) {
@@ -271,5 +277,9 @@ public class App {
             ctx.redirect("/products");
         });
 
+    }
+
+    public static String getModoConexion() {
+        return modoConexion;
     }
 }

@@ -1,7 +1,7 @@
 package edu.pucmm.eict.crud.logic;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -15,9 +15,9 @@ public class cart implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
     @OneToMany
-    private ArrayList<product> products;
+    private List<product> products;
 
-    public cart(ArrayList<product> products) {
+    public cart(List<product> products) {
         this.products = products;
     }
 
@@ -25,11 +25,11 @@ public class cart implements Serializable {
         return ID;
     }
 
-    public ArrayList<product> getProducts() {
+    public List<product> getProducts() {
         return products;
     }
 
-    public void setProducts(ArrayList<product> products) {
+    public void setProducts(List<product> products) {
         this.products = products;
     }
 
