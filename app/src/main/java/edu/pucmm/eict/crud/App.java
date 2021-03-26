@@ -73,7 +73,10 @@ public class App {
             }
         });
 
-        app.get("/", ctx -> ctx.redirect("/main"));
+        app.get("/", ctx -> {
+            ctx.result("Hola");
+            // ctx.redirect("/main");
+        });
 
         app.get("/main", ctx -> {
             Map<String, Object> pModel = new HashMap<>();
