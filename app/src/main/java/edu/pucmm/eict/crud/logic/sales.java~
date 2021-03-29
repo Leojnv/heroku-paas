@@ -18,7 +18,6 @@ public class sales implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
     @NotNull
-    @Lob
     private cart cart;
     @NotNull
     private String salesDate;
